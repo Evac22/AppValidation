@@ -15,7 +15,7 @@ namespace AppValidation
                 string folderPath = ConfigurationManager.AppSettings["FolderPath"];
 
                 // Проверка, что значение не пустое или null
-                if(!string.IsNullOrEmpty(folderPath) )
+                if (!string.IsNullOrEmpty(folderPath))
                 {
                     return folderPath;
                 }
@@ -41,28 +41,42 @@ namespace AppValidation
         {
             try
             {
-                if(Directory.Exists(folderPath)) 
+                if (Directory.Exists(folderPath))
                 {
                     string[] files = Directory.GetFiles(folderPath);
 
                     Console.WriteLine("Список файлов:");
+                    int invalidFileCount = 0; // Счетчик недействительных файлов
+
                     foreach (string filePath in files)
                     {
-                        string extension = Path.GetExtension(filePath); ;
+                        string extension = Path.GetExtension(filePath);
+
                         if (string.Equals(extension, ".txt", StringComparison.OrdinalIgnoreCase)
-                            || string.Equals(extension, "csv", StringComparison.OrdinalIgnoreCase))
+                            || string.Equals(extension, ".csv", StringComparison.OrdinalIgnoreCase))
                         {
                             Console.WriteLine(filePath);
+                            string[] lines = FileParser.ReadFileLines(filePath);
+                            int invalidLineCount = 0;   
+                            foreach (string line in lines)
+                            {
+                                FileParser.ProcessLine(line, ref invalidLineCount);
+                            }
                         }
-                       
+                        else
+                        {
+                            invalidFileCount++; // Увеличиваем счетчик недействительных файлов
+                        }
                     }
+
+                    Console.WriteLine($"Недействительных файлов: {invalidFileCount}");
                 }
                 else
                 {
                     Console.WriteLine("Папка не существует.");
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine("Ошибка при получении списка файлов:");
                 Console.WriteLine(ex.Message);
