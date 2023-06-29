@@ -25,7 +25,6 @@ namespace AppValidation
                     // Возможно, вы захотите выбросить исключение или вернуть дефолтное значение
                     // в зависимости от ваших требований
                     Console.WriteLine("Путь к папке (A) не найден в файле конфигурации.");
-
                 }
             }
             catch (ConfigurationErrorsException ex)
@@ -56,12 +55,7 @@ namespace AppValidation
                             || string.Equals(extension, ".csv", StringComparison.OrdinalIgnoreCase))
                         {
                             Console.WriteLine(filePath);
-                            string[] lines = FileParser.ReadFileLines(filePath);
-                            int invalidLineCount = 0;   
-                            foreach (string line in lines)
-                            {
-                                FileParser.ProcessLine(line, ref invalidLineCount);
-                            }
+                            FileParser.ProcessFile(filePath, ref invalidFileCount);
                         }
                         else
                         {
