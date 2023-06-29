@@ -68,10 +68,10 @@ namespace AppValidation
                     string address = values[2].Trim() + ", " + values[3].Trim() + ", " + values[4].Trim();
                     decimal payment;
                     DateTime date;
-                    long account_number;
+                    long accountNumber;
                     string service = values[6].Trim();
 
-                    // Пример: Проверка типов данных для поля 'Payment'
+                    // Проверка типов данных для поля 'Payment'
                     if (!decimal.TryParse(values[5].Trim(), out payment))
                     {
                         invalidLineCount++;
@@ -80,7 +80,7 @@ namespace AppValidation
                         return;
                     }
 
-                    // Пример: Проверка типов данных для поля 'Date'
+                    // Проверка типов данных для поля 'Date'
                     if (!DateTime.TryParse(values[6].Trim(), out date))
                     {
                         invalidLineCount++;
@@ -89,8 +89,8 @@ namespace AppValidation
                         return;
                     }
 
-                    // Пример: Проверка типов данных для поля 'Account Number'
-                    if (!long.TryParse(values[7].Trim(), out account_number))
+                    // Проверка типов данных для поля 'Account Number'
+                    if (!long.TryParse(values[7].Trim(), out accountNumber))
                     {
                         invalidLineCount++;
                         Console.WriteLine($"Error processing line: {line}");
@@ -98,7 +98,7 @@ namespace AppValidation
                         return;
                     }
 
-                    // Пример: Проверка наличия всех значений
+                    // Проверка наличия всех значений
                     if (string.IsNullOrEmpty(firstName) || string.IsNullOrEmpty(lastName))
                     {
                         invalidLineCount++;
@@ -107,11 +107,24 @@ namespace AppValidation
                         return;
                     }
 
+                    // Создание экземпляра Models и заполнение его значениями
+                    Models model = new Models()
+                    {
+                        FirstName = firstName,
+                        LastName = lastName,
+                        Address = address,
+                        Payment = payment,
+                        Date = date,
+                        AccountNumber = accountNumber,
+                        Service = service
+                    };
+
+
                     // Выполните необходимую обработку данных и сохраните результаты
                     // в соответствующем формате
 
-                    // Пример: Вывод обработанных данных в консоль
-                    Console.WriteLine($"First Name: {firstName}, Last Name: {lastName}, Address: {address}, Payment: {payment}, Date: {date}, Account Number: {account_number}, Service: {service}");
+                    // Вывод обработанных данных в консоль
+                    Console.WriteLine($"First Name: {model.FirstName}, Last Name: {model.LastName}, Address: {model.Address}, Payment: {model.Payment}, Date: {model.Date}, Account Number: {model.AccountNumber}, Service: {model.Service}");
                 }
                 else
                 {
