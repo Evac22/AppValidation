@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 
@@ -33,11 +34,13 @@ namespace AppValidation
                 Console.WriteLine("Ошибка чтения файла конфигурации: " + ex.Message);
 
             }
-            return null;// Возвращаем null в случае ошибки или отсутствия значения
+            return null; // Возвращаем null в случае ошибки или отсутствия значения
         }
 
         public static void DisplayAllFiles(string folderPath)
         {
+            DataAggregator dataAggregator = new DataAggregator();
+
             try
             {
                 if (Directory.Exists(folderPath))
@@ -55,7 +58,7 @@ namespace AppValidation
                             || string.Equals(extension, ".csv", StringComparison.OrdinalIgnoreCase))
                         {
                             Console.WriteLine(filePath);
-                            FileParser.ProcessFile(filePath, ref invalidFileCount);
+                            FileParser.ProcessFile(filePath, ref invalidFileCount, dataAggregator);
                         }
                         else
                         {
@@ -64,10 +67,34 @@ namespace AppValidation
                     }
 
                     Console.WriteLine($"Недействительных файлов: {invalidFileCount}");
+
+                    // Вывод агрегированных данных
+                    Console.WriteLine($"Total Payment: {dataAggregator.TotalPayment}");
+
+                    Console.WriteLine("Payers by City:");
+                    foreach (KeyValuePair<string, List<Models>> kvp in dataAggregator.CityPayers)
+                    {
+                        Console.WriteLine($"City: {kvp.Key}");
+                        foreach (Models model in kvp.Value)
+                        {
+                            Console.WriteLine($"Name: {model.FirstName} {model.LastName}, Payment: {model.Payment}");
+                        }
+                    }
+
+                    Console.WriteLine("Payers by Service:");
+                    foreach (KeyValuePair<string, List<Models>> kvp in dataAggregator.ServicePayers)
+                    {
+                        Console.WriteLine($"Service: {kvp.Key}");
+                        foreach (Models model in kvp.Value)
+                        {
+                            Console.WriteLine($"Name: {model.FirstName} {model.LastName}, Payment: {model.Payment}");
+                        }
+                    }
                 }
                 else
                 {
                     Console.WriteLine("Папка не существует.");
+                    return;
                 }
             }
             catch (Exception ex)
@@ -76,5 +103,6 @@ namespace AppValidation
                 Console.WriteLine(ex.Message);
             }
         }
+
     }
 }

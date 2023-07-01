@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config.cs" />
+    <Compile Include="DataAggregator.cs" />
     <Compile Include="FileParser.cs" />
     <Compile Include="FileStorage.cs" />
     <Compile Include="FileWatcher.cs" />

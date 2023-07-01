@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace AppValidation
@@ -22,7 +23,7 @@ namespace AppValidation
             return new string[0];// Если чтение файла не удалось, возвращаем пустой массив строк
         }
 
-        public static void ProcessFile(string filePath, ref int invalidFileCount)
+        public static void ProcessFile(string filePath, ref int invalidFileCount, DataAggregator dataAggregator)
         {
             try
             {
@@ -31,12 +32,12 @@ namespace AppValidation
 
                 Console.WriteLine($"File: {filePath}");
 
+                List<Models> models = new List<Models>();
+
                 foreach (string line in lines)
                 {
-                    if (string.IsNullOrWhiteSpace(line))
-                        continue;
-
-                    ProcessLine(line, ref invalidLineCount);
+                    
+                    ProcessLine(line, ref invalidLineCount, ref models);
                 }
 
                 Console.WriteLine($"Invalid lines in file {filePath}: {invalidLineCount}");
@@ -49,7 +50,7 @@ namespace AppValidation
             }
         }
 
-        public static void ProcessLine(string line, ref int invalidLineCount)
+        public static void ProcessLine(string line, ref int invalidLineCount, ref List<Models> models)
         {
             try
             {
