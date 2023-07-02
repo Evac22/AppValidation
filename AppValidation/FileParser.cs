@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 
 namespace AppValidation
 {
@@ -28,27 +29,30 @@ namespace AppValidation
             try
             {
                 string[] lines = File.ReadAllLines(filePath);
-                int invalidLineCount = 0; // Counter for invalid lines
+                int invalidLineCount = 0; // Счетчик некорректных строк
 
-                Console.WriteLine($"File: {filePath}");
+                Console.WriteLine($"Файл: {filePath}");
 
                 List<Models> models = new List<Models>();
 
                 foreach (string line in lines)
                 {
-                    
                     ProcessLine(line, ref invalidLineCount, ref models);
                 }
 
-                Console.WriteLine($"Invalid lines in file {filePath}: {invalidLineCount}");
+                Console.WriteLine($"Некорректные строки в файле {filePath}: {invalidLineCount}");
                 invalidFileCount += invalidLineCount;
+
+                // Добавление моделей в агрегатор данных
+                dataAggregator.Aggregate(models);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error processing file {filePath}: {ex.Message}");
+                Console.WriteLine($"Ошибка при обработке файла {filePath}: {ex.Message}");
                 invalidFileCount++;
             }
         }
+
 
         public static void ProcessLine(string line, ref int invalidLineCount, ref List<Models> models)
         {
@@ -62,7 +66,7 @@ namespace AppValidation
 
                 string[] values = line.Split(',');
 
-                if (values.Length >= 7)
+                if (values.Length >= 8)
                 {
                     string firstName = values[0].Trim();
                     string lastName = values[1].Trim();
@@ -70,14 +74,14 @@ namespace AppValidation
                     decimal payment;
                     DateTime date;
                     long accountNumber;
-                    string service = values[6].Trim();
+                    string service = values[7].Trim();
 
                     // Проверка типов данных для поля 'Payment'
                     if (!decimal.TryParse(values[5].Trim(), out payment))
                     {
                         invalidLineCount++;
-                        Console.WriteLine($"Error processing line: {line}");
-                        Console.WriteLine("Invalid data type for 'Payment' field.");
+                        Console.WriteLine($"Ошибка при обработке строки: {line}");
+                        Console.WriteLine("Недопустимый тип данных для поля 'Payment'.");
                         return;
                     }
 
@@ -85,8 +89,8 @@ namespace AppValidation
                     if (!DateTime.TryParse(values[6].Trim(), out date))
                     {
                         invalidLineCount++;
-                        Console.WriteLine($"Error processing line: {line}");
-                        Console.WriteLine("Invalid data type for 'Date' field.");
+                        Console.WriteLine($"Ошибка при обработке строки: {line}");
+                        Console.WriteLine("Недопустимый тип данных для поля 'Date'.");
                         return;
                     }
 
@@ -94,8 +98,8 @@ namespace AppValidation
                     if (!long.TryParse(values[7].Trim(), out accountNumber))
                     {
                         invalidLineCount++;
-                        Console.WriteLine($"Error processing line: {line}");
-                        Console.WriteLine("Invalid data type for 'Account Number' field.");
+                        Console.WriteLine($"Ошибка при обработке строки: {line}");
+                        Console.WriteLine("Недопустимый тип данных для поля 'Account Number'.");
                         return;
                     }
 
@@ -103,8 +107,8 @@ namespace AppValidation
                     if (string.IsNullOrEmpty(firstName) || string.IsNullOrEmpty(lastName))
                     {
                         invalidLineCount++;
-                        Console.WriteLine($"Error processing line: {line}");
-                        Console.WriteLine("Missing values for one or more fields.");
+                        Console.WriteLine($"Ошибка при обработке строки: {line}");
+                        Console.WriteLine("Отсутствуют значения для одного или нескольких полей.");
                         return;
                     }
 
@@ -120,9 +124,8 @@ namespace AppValidation
                         Service = service
                     };
 
-
-                    // Выполните необходимую обработку данных и сохраните результаты
-                    // в соответствующем формате
+                    // Добавление модели в список моделей
+                    models.Add(model);
 
                     // Вывод обработанных данных в консоль
                     Console.WriteLine($"First Name: {model.FirstName}, Last Name: {model.LastName}, Address: {model.Address}, Payment: {model.Payment}, Date: {model.Date}, Account Number: {model.AccountNumber}, Service: {model.Service}");
@@ -130,13 +133,13 @@ namespace AppValidation
                 else
                 {
                     invalidLineCount++;
-                    Console.WriteLine($"Error processing line: {line}");
-                    Console.WriteLine("Insufficient values after line splitting.");
+                    Console.WriteLine($"Ошибка при обработке строки: {line}");
+                    Console.WriteLine("Недостаточное количество значений после разделения строки.");
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error processing line: {line}");
+                Console.WriteLine($"Ошибка при обработке строки: {line}");
                 Console.WriteLine(ex.Message);
                 // Логирование ошибки, если требуется
             }

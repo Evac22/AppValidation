@@ -37,10 +37,9 @@ namespace AppValidation
             return null; // Возвращаем null в случае ошибки или отсутствия значения
         }
 
-        public static void DisplayAllFiles(string folderPath)
-        {
-            DataAggregator dataAggregator = new DataAggregator();
 
+        public static void DisplayAllFiles(string folderPath, DataAggregator dataAggregator)
+        {
             try
             {
                 if (Directory.Exists(folderPath))
@@ -67,29 +66,6 @@ namespace AppValidation
                     }
 
                     Console.WriteLine($"Недействительных файлов: {invalidFileCount}");
-
-                    // Вывод агрегированных данных
-                    Console.WriteLine($"Total Payment: {dataAggregator.TotalPayment}");
-
-                    Console.WriteLine("Payers by City:");
-                    foreach (KeyValuePair<string, List<Models>> kvp in dataAggregator.CityPayers)
-                    {
-                        Console.WriteLine($"City: {kvp.Key}");
-                        foreach (Models model in kvp.Value)
-                        {
-                            Console.WriteLine($"Name: {model.FirstName} {model.LastName}, Payment: {model.Payment}");
-                        }
-                    }
-
-                    Console.WriteLine("Payers by Service:");
-                    foreach (KeyValuePair<string, List<Models>> kvp in dataAggregator.ServicePayers)
-                    {
-                        Console.WriteLine($"Service: {kvp.Key}");
-                        foreach (Models model in kvp.Value)
-                        {
-                            Console.WriteLine($"Name: {model.FirstName} {model.LastName}, Payment: {model.Payment}");
-                        }
-                    }
                 }
                 else
                 {

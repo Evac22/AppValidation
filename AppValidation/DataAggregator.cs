@@ -37,5 +37,31 @@ namespace AppValidation
 
             }
         }
+
+        public static void DisplayAggregatedData(DataAggregator dataAggregator)
+        {
+            Console.WriteLine($"Total Payment: {dataAggregator.TotalPayment}");
+
+            Console.WriteLine("Payers by City:");
+            foreach (KeyValuePair<string, List<Models>> kvp in dataAggregator.CityPayers)
+            {
+                Console.WriteLine($"City: {kvp.Key}");
+                foreach (Models model in kvp.Value)
+                {
+                    Console.WriteLine($"Name: {model.FirstName} {model.LastName}, Payment: {model.Payment}");
+                }
+            }
+
+            Console.WriteLine("Payers by Service:");
+            foreach (KeyValuePair<string, List<Models>> kvp in dataAggregator.ServicePayers)
+            {
+                Console.WriteLine($"Service: {kvp.Key}");
+                foreach (Models model in kvp.Value)
+                {
+                    Console.WriteLine($"Name: {model.FirstName} {model.LastName}, Payment: {model.Payment}");
+                }
+            }
+        }
+
     }
 }
