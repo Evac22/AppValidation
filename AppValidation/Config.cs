@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 
@@ -35,6 +34,49 @@ namespace AppValidation
 
             }
             return null; // Возвращаем null в случае ошибки или отсутствия значения
+        }
+
+        public static string GetResultFolderPathFromConfig()
+        {
+            try
+            {
+                string resultFolderPath = ConfigurationManager.AppSettings["ResultFolderPath"];
+                if (!string.IsNullOrEmpty(resultFolderPath))
+                {
+                    return resultFolderPath;
+                }
+                else
+                {
+                    Console.WriteLine("Путь к папке B не найден в файле конфигурации.");
+                }
+            }
+            catch(ConfigurationErrorsException ex)
+            {
+                Console.WriteLine("Ошибка чтения файла конфигурации: " + ex.Message);
+            }
+            return null;
+
+        }
+
+        public static string GetSubfolderNameFromConfig()
+        {
+            try
+            {
+                string subfolderName = ConfigurationManager.AppSettings["SubfolderName"];
+                if (!string.IsNullOrEmpty(subfolderName))
+                {
+                    return subfolderName;
+                }
+                else
+                {
+                    Console.WriteLine("Имя подпапки не найдено в файле конфигурации.");
+                }
+            }
+            catch (ConfigurationErrorsException ex)
+            {
+                Console.WriteLine("Ошибка чтения файла конфигурации: " + ex.Message);
+            }
+            return null;
         }
 
 
@@ -79,6 +121,8 @@ namespace AppValidation
                 Console.WriteLine(ex.Message);
             }
         }
+
+        
 
     }
 }
