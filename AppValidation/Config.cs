@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 
@@ -91,6 +92,8 @@ namespace AppValidation
 
                     Console.WriteLine("Список файлов:");
                     int invalidFileCount = 0; // Счетчик недействительных файлов
+                    int errorCount = 0; // Счетчик ошибок
+                    List<string> invalidFiles = new List<string>(); // Список недействительных файлов
 
                     foreach (string filePath in files)
                     {
@@ -99,8 +102,7 @@ namespace AppValidation
                         if (string.Equals(extension, ".txt", StringComparison.OrdinalIgnoreCase)
                             || string.Equals(extension, ".csv", StringComparison.OrdinalIgnoreCase))
                         {
-                            Console.WriteLine(filePath);
-                            FileParser.ProcessFile(filePath, ref invalidFileCount, dataAggregator);
+                            Console.WriteLine(filePath);                           
                         }
                         else
                         {
@@ -123,7 +125,7 @@ namespace AppValidation
             }
         }
 
-        
+
 
     }
 }

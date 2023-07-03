@@ -11,6 +11,10 @@ namespace AppValidation
         {
             string folderPath = Config.GetFolderPathFromConfig();
             int invalidFileCount = 0;
+            int processedFileCount = 0;
+            int processedLineCount = 0;
+            int errorCount = 0;
+            List<string> invalidFiles = new List<string>();
 
             // Создание экземпляра DataAggregator
             DataAggregator dataAggregator = new DataAggregator();
@@ -18,11 +22,16 @@ namespace AppValidation
             // Обработка файлов и агрегирование данных
             Config.DisplayAllFiles(folderPath, dataAggregator);
 
-            // Обработка файлов и агрегация данных
-            FileParser.ProcessFile(folderPath, ref invalidFileCount, dataAggregator);
+
+            // Обработка файлов и агрегирование данных
+            FileParser.ProcessFiles(folderPath, ref invalidFileCount, ref processedFileCount, ref processedLineCount, ref errorCount, invalidFiles, dataAggregator);
 
             // Сохранение результатов
             FileStorage.SaveResultsToFile(dataAggregator);
+
+            // Завершение дня и создание файла meta.log
+            string subfolderPath = Path.GetDirectoryName(folderPath);
+            MetaLog.EndOfDay(subfolderPath, processedFileCount, processedLineCount, errorCount, invalidFiles);
 
             // Вывод агрегированных данных
             DataAggregator.DisplayAggregatedData(dataAggregator);
@@ -31,5 +40,7 @@ namespace AppValidation
             Console.WriteLine("Завершение работы. Нажмите любую клавишу для выхода.");
             Console.ReadKey();
         }
+
+
     }
 }

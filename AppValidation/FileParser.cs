@@ -24,13 +24,12 @@ namespace AppValidation
             return new string[0];// Если чтение файла не удалось, возвращаем пустой массив строк
         }
 
-        public static void ProcessFile(string filePath, ref int invalidFileCount, DataAggregator dataAggregator)
+        public static void ProcessFile(string filePath, ref int invalidFileCount, ref int processedLineCount, ref int errorCount, List<string> invalidFiles, DataAggregator dataAggregator)
         {
             try
             {
                 string[] lines = File.ReadAllLines(filePath);
                 int invalidLineCount = 0; // Счетчик некорректных строк
-                
 
                 Console.WriteLine($"Файл: {filePath}");
 
@@ -39,10 +38,10 @@ namespace AppValidation
                 foreach (string line in lines)
                 {
                     ProcessLine(line, ref invalidLineCount, ref models);
+                    processedLineCount++;
                 }
 
-                Console.WriteLine($"Некорректные строки в файле {filePath}: {invalidLineCount}");
-                invalidFileCount += invalidLineCount;
+                
 
                 // Добавление моделей в агрегатор данных
                 dataAggregator.Aggregate(models);
@@ -51,9 +50,31 @@ namespace AppValidation
             {
                 Console.WriteLine($"Ошибка при обработке файла {filePath}: {ex.Message}");
                 invalidFileCount++;
+                errorCount++;
+                invalidFiles.Add(filePath);
             }
         }
 
+
+        public static void ProcessFiles(string folderPath, ref int invalidFileCount, ref int processedFileCount, ref int processedLineCount, ref int errorCount, List<string> invalidFiles, DataAggregator dataAggregator)
+        {
+            try
+            {
+                string[] filePaths = Directory.GetFiles(folderPath, "*.txt", SearchOption.AllDirectories);
+
+                foreach (string filePath in filePaths)
+                {
+                    ProcessFile(filePath, ref invalidFileCount, ref processedLineCount, ref errorCount, invalidFiles, dataAggregator);
+                    processedFileCount++;
+                }
+
+                Console.WriteLine("Обработка файлов завершена.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка при обработке файлов: {ex.Message}");
+            }
+        }
 
         public static void ProcessLine(string line, ref int invalidLineCount, ref List<Models> models)
         {
