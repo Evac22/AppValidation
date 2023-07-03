@@ -30,6 +30,7 @@ namespace AppValidation
             {
                 string[] lines = File.ReadAllLines(filePath);
                 int invalidLineCount = 0; // Счетчик некорректных строк
+                
 
                 Console.WriteLine($"Файл: {filePath}");
 

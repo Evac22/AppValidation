@@ -37,6 +37,7 @@ namespace AppValidation
         }
 
         public static string GetResultFolderPathFromConfig()
+        
         {
             try
             {

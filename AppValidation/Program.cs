@@ -10,12 +10,19 @@ namespace AppValidation
         static void Main(string[] args)
         {
             string folderPath = Config.GetFolderPathFromConfig();
+            int invalidFileCount = 0;
 
             // Создание экземпляра DataAggregator
             DataAggregator dataAggregator = new DataAggregator();
 
             // Обработка файлов и агрегирование данных
             Config.DisplayAllFiles(folderPath, dataAggregator);
+
+            // Обработка файлов и агрегация данных
+            FileParser.ProcessFile(folderPath, ref invalidFileCount, dataAggregator);
+
+            // Сохранение результатов
+            FileStorage.SaveResultsToFile(dataAggregator);
 
             // Вывод агрегированных данных
             DataAggregator.DisplayAggregatedData(dataAggregator);
