@@ -1,11 +1,11 @@
-﻿using AppValidation.Config.Interfaces;
+﻿using AppValidation.Configs.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AppValidation.Config
+namespace AppValidation.Configs
 {
     // Реализация получения пути к результатам
     internal class ResultFolderPathConfigProvider : IResultFolderPathConfigProvider

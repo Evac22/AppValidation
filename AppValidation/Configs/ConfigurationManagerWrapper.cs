@@ -1,4 +1,4 @@
-﻿using AppValidation.Config.Interfaces;
+﻿using AppValidation.Configs.Interfaces;
 using log4net;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AppValidation.Config
+namespace AppValidation.Configs
 {
     // Реализация чтения конфигурационных значений с использованием ConfigurationManager
     internal class ConfigurationManagerWrapper : IConfigReader

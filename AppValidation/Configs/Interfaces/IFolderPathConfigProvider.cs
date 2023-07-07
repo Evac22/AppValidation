@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AppValidation.Config.Interfaces
+namespace AppValidation.Configs.Interfaces
 {
     // Интерфейс для получения пути к папке
     internal interface IFolderPathConfigProvider
